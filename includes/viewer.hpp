@@ -1,13 +1,13 @@
 #pragma once
 
-#include <vtkDataSet.hpp>
-#include <vtkSmartPointer.hpp>
+#include <vtkDataSet.h>
+#include <vtkSmartPointer.h>
 
 class Viewer
 {
 public:
-  Viewer(void);
-  ~Viewer(void);
+    Viewer(void);
+    ~Viewer(void);
 
-  void view(vtkSmartPointer<vtkDataSet> data);
+    void view(vtkSmartPointer<vtkDataSet> data);
 };
