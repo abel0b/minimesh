@@ -34,3 +34,7 @@ void OptionsParser::parse(void)
   } else {
   }
 }
+
+OptionsParser::~OptionsParser() {
+    //delete m_data;
+}

@@ -12,13 +12,16 @@ include_directories(
 )
 
 set(EXE_SOURCES
-  src/options.cpp
-  # Add other source files here, one by line
+    src/options.cpp
+    src/viewer.cpp
+    src/transform.cpp
+    src/quality.cpp
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp ${EXE_SOURCES})
 
-set(VTK_DIR "${VTK_INSTALL_DIR}/lib/cmake/vtk-8.2")
+#set(VTK_DIR "${VTK_INSTALL_DIR}/lib/cmake/vtk-8.2")
+set(VTK_DIR "/opt/vtk/8.2.0/lib64/cmake/vtk-8.2")
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 

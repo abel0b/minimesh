@@ -8,7 +8,7 @@ class OptionsParser
 {
 public:
   OptionsParser(const std::string&);
-  ~OptionsParser(void) {}
+  ~OptionsParser(void);
 
   // TODO: modifier le type de retour en cohérence
   // avec la structure de données renvoyée.
