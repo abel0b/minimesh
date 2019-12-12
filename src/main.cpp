@@ -5,6 +5,7 @@
 #include <memory>
 #include <tuple>
 #include <vtkXMLUnstructuredGridReader.h>
+#include <vtkUnstructuredGrid.h>
 #include <vtkSmartPointer.h>
 #include <vtkDataSet.h>
 #include "options.hpp"
@@ -46,7 +47,7 @@ int main(int argc, char * argv []) {
         reader->SetFileName(file_name.c_str());
         reader->Update();
 
-        auto ugrid = vtkSmartPointer<vtkDataSet>::NewInstance((vtkDataSet *)reader->GetOutput());
+        vtkSmartPointer<vtkUnstructuredGrid> ugrid = reader->GetOutput();
 
         Viewer viewer;
         viewer.view(ugrid);

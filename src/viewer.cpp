@@ -4,6 +4,10 @@
 #include <vtkRenderWindow.h>
 #include <vtkActor.h>
 #include <vtkDataSetMapper.h>
+#include <vtkProperty.h>
+#include <vtkCamera.h>
+#include <vtkXMLUnstructuredGridReader.h>
+#include <vtkUnstructuredGrid.h>
 
 Viewer::Viewer() {
 
@@ -15,12 +19,8 @@ Viewer::~Viewer() {
 
 }
 
-void Viewer::view(vtkSmartPointer<vtkDataSet> data) {
-    auto mapper = vtkSmartPointer<vtkDataSetMapper>::New();
-    mapper->SetInputData(data);
-
+void Viewer::view(vtkSmartPointer<vtkUnstructuredGrid> grid) {
     auto renderer = vtkSmartPointer<vtkRenderer>::New();
-    renderer->SetBackground(0.2, 0.2, 0.2);
 
     auto window = vtkSmartPointer<vtkRenderWindow>::New();
     window->AddRenderer(renderer);
@@ -29,12 +29,31 @@ void Viewer::view(vtkSmartPointer<vtkDataSet> data) {
     auto interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
     interactor->SetRenderWindow(window);
 
-    interactor->Initialize();
+    renderer->SetBackground(0.2, 0.2, 0.2);
+    renderer->UseHiddenLineRemovalOn();
+
+    auto mapper = vtkSmartPointer<vtkDataSetMapper>::New();
+    mapper->SetInputData(grid);
+    mapper->ScalarVisibilityOff();
+
+    auto backProp = vtkSmartPointer<vtkProperty>::New();
+    backProp->SetDiffuseColor(0.95, 0.95, 0.95);
+    backProp->SetSpecular(0.6);
+    backProp->SetSpecularPower(30);
 
     auto actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-    renderer->AddActor(actor);
+    actor->SetBackfaceProperty(backProp);
+    actor->GetProperty()->EdgeVisibilityOn();
+    actor->GetProperty()->SetDiffuseColor(1.0, 0.1, 0.1);
+    actor->GetProperty()->SetSpecular(0.3);
+    actor->GetProperty()->SetSpecularPower(30);
 
+    renderer->AddActor(actor);
+    renderer->GetActiveCamera()->Azimuth(45);
+    renderer->GetActiveCamera()->Elevation(45);
+    renderer->ResetCamera();
+    
     window->Render();
     interactor->Start();
 }
