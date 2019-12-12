@@ -4,7 +4,9 @@
 #include <vector>
 #include <memory>
 #include <tuple>
+#include <regex>
 #include <vtkXMLUnstructuredGridReader.h>
+#include <vtkUnstructuredGridReader.h>
 #include <vtkUnstructuredGrid.h>
 #include <vtkSmartPointer.h>
 #include <vtkDataSet.h>
@@ -42,15 +44,28 @@ int main(int argc, char * argv []) {
             return EXIT_FAILURE;
         }
         file_name = argv[2];
-        std::cout << "view " << file_name << std::endl;
-        auto reader = vtkSmartPointer<vtkXMLUnstructuredGridReader>::New();
-        reader->SetFileName(file_name.c_str());
-        reader->Update();
-
-        vtkSmartPointer<vtkUnstructuredGrid> ugrid = reader->GetOutput();
-
+        
+        std::string ext = file_name.substr(file_name.find_last_of(".") + 1);
+        vtkSmartPointer<vtkUnstructuredGrid> grid;
+        if (ext == "vtu") {
+            auto reader = vtkSmartPointer<vtkXMLUnstructuredGridReader>::New();
+            reader->SetFileName(file_name.c_str());
+            reader->Update();
+            grid = reader->GetOutput();
+        }
+        else if (ext == "vtk") {
+            auto reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
+            reader->SetFileName(file_name.c_str());
+            reader->Update();
+            grid = reader->GetOutput(); 
+        }
+        else {
+            std::cerr << "Invalid file name" << std::endl;
+            return EXIT_FAILURE;
+        }
+       
         Viewer viewer;
-        viewer.view(ugrid);
+        viewer.view(grid);
     }
     else if (command == "-t" || command == "--transform") {
         if (argc < 3) {
