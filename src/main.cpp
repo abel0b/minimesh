@@ -74,9 +74,10 @@ int main(int argc, char * argv []) {
             return EXIT_FAILURE;
         }
         file_name = argv[2];
-        auto op = new OptionsParser(file_name);
-        op->parse();
-        delete op;
+        
+        OptionsParser op(file_name);
+        auto command = op.parse();
+        command->execute();
     }
     else {
         std::cerr << "Error: unknown command\n";
